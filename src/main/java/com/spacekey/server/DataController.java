@@ -17,7 +17,7 @@ import com.spacekey.algorithm.Link;
 @RequestMapping("data")
 public class DataController {
 
-	@GetMapping("fuck")
+	@GetMapping("")
 	String mck() {
 		return "Yes";
 	}
