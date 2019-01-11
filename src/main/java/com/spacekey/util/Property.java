@@ -5,9 +5,9 @@ public class Property {
 	public String type;
 	public int price;
 	public int rent;
-	public String roomNum;
+	public int bedrooms;
 	public int grossArea;
-	public int netFloorArea;
+	public int saleableArea;
 	public String floor;
 	public String address;
 	public String postDate;

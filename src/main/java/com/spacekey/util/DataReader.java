@@ -56,9 +56,9 @@ public class DataReader {
 				p.type = items[1];
 				p.price = Integer.parseInt(items[2]);
 				p.rent = Integer.parseInt(items[3]);
-				p.roomNum = items[4];
+				p.bedrooms = Integer.parseInt(items[4]);
 				p.grossArea = Integer.parseInt(items[5]);
-				p.netFloorArea = Integer.parseInt(items[6]);
+				p.saleableArea = Integer.parseInt(items[6]);
 				p.floor = items[7];
 				p.address = items[8];
 				p.postDate = items[9];
