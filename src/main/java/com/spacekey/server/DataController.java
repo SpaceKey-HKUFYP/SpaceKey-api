@@ -40,8 +40,9 @@ public class DataController {
 		System.out.println(type + " " + region);
 		for (Property p: data) {
 			// System.out.println(type + " " + p.type + " " + region + " " + p.region);
-			if (p.type.equals(type) && p.region.equals(region)) 
-				result.add(p);
+			if (type == "null" || p.type.equals(type))
+				if (region == "null" || p.region.equals(region)) 
+					result.add(p);
 		}
 		return new PropertyRet(result);
 	}

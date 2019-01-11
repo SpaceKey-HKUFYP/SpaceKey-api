@@ -20,9 +20,9 @@ public class DataReader {
 			while ((items = reader.readNext()) != null) {
 				if (count == 0) { count++; continue; } else count++;
 			    // items[] is an array of values from the line
-				for (int i=0 ; i<items.length ; i++) {
-					System.out.print(items[i] + " ");
-				}
+//				for (int i=0 ; i<items.length ; i++) {
+//					System.out.print(items[i] + " ");
+//				}
 				POI p = new POI();
 				p.name = items[0];
 				p.numOfReviews = Integer.parseInt(items[1]);
@@ -54,9 +54,9 @@ public class DataReader {
 			while ((items = reader.readNext()) != null) {
 				if (count == 0) { count++; continue; } else count++;
 			    // items[] is an array of values from the line
-				for (int i=0 ; i<items.length ; i++) {
-					System.out.print(items[i] + " ");
-				}
+//				for (int i=0 ; i<items.length ; i++) {
+//					System.out.print(items[i] + " ");
+//				}
 				Property p = new Property();
 				p.id = Integer.parseInt(items[0]);
 				p.type = items[1];
