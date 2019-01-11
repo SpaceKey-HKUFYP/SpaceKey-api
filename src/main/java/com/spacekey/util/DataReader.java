@@ -1,12 +1,12 @@
 package com.spacekey.util;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+
+import com.opencsv.CSVReader;
 
 public class DataReader {
 	
@@ -40,61 +40,61 @@ public class DataReader {
 	}
 	
 	public static ArrayList<Property> readProperty(String path, String filename) {
-		String splitChar = ";";
-		String text = "";
 		ArrayList<Property> result = new ArrayList<Property>();
-		
-		try {
-			File file = new File(path, filename);
-			if (!file.exists()) {
-				return null;
-			}
-			FileInputStream inputStream = new FileInputStream(file);
-			byte[] b = new byte[inputStream.available()];
-			inputStream.read(b);
-			text = new String(b);
-			String[] items = text.split(splitChar);
-			
-			int i = 20;
-			while (i < items.length) {
+        try {
+			CSVReader reader = new CSVReader(new FileReader(path + filename));
+			String [] items;
+			int count = 0;
+			while ((items = reader.readNext()) != null) {
+				if (count == 0) { count++; continue; } else count++;
+			    // items[] is an array of values from the line
+				for (int i=0 ; i<items.length ; i++) {
+					System.out.print(items[i] + " ");
+				}
 				Property p = new Property();
-				System.out.print(items[i]);
-				p.id = Integer.parseInt(items[i++]);
-				p.type = items[i++];
-				p.price = Integer.parseInt(items[i++]);
-				p.rent = Integer.parseInt(items[i++]);
-				p.roomNum = items[i++];
-				p.grossArea = Integer.parseInt(items[i++]);
-				p.netFloorArea = Integer.parseInt(items[i++]);
-				p.floor = items[i++];
-				p.address = items[i++];
-				p.postDate = items[i++];
-				p.lat = Double.parseDouble(items[i++]);
-				p.lng = Double.parseDouble(items[i++]);
-				p.title = items[i++];
-				p.region = items[i++];
-				p.propertyName = items[i++];
-				p.description = items[i++];
-				p.contact = items[i++];
-				p.phoneNum = items[i++];
-				p.imageURL = items[i++];
-				p.pageURL = items[i++];
-				p.agentName = items[i++];
+				p.id = Integer.parseInt(items[0]);
+				p.type = items[1];
+				p.price = Integer.parseInt(items[2]);
+				p.rent = Integer.parseInt(items[3]);
+				p.roomNum = items[4];
+				p.grossArea = Integer.parseInt(items[5]);
+				p.netFloorArea = Integer.parseInt(items[6]);
+				p.floor = items[7];
+				p.address = items[8];
+				p.postDate = items[9];
+				p.lat = Double.parseDouble(items[10]);
+				p.lng = Double.parseDouble(items[11]);
+				p.title = items[12];
+				p.region = items[13];
+				p.propertyName = items[14];
+				p.description = items[15];
+				p.contact = items[16];
+				p.phoneNum = items[17];
+				p.imageURL = items[18];
+				p.pageURL = items[19];
+				p.agentName = items[20];
 				result.add(p);
+				System.out.println();
 			}
-			
-		} catch (Exception e) {
-			e.printStackTrace();
+			reader.close();
+		} catch (FileNotFoundException e) {
+		    e.printStackTrace();
+		} catch (IOException e) {
+		    e.printStackTrace();
 		}
-		return result;
+        return result;
 	}
 	
 
 	public static void main(String[] args) {
-		//ArrayList<String[]> result = readPOI("C:\\Users\\WagJK\\Desktop\\FYP\\SpaceKey-backend\\dataset\\poi.csv");
-		ArrayList<Property> result = readProperty("C:\\Users\\WagJK\\Desktop\\FYP\\SpaceKey-backend\\dataset", "properties.csv");
-		for (Property p : result) {
-			System.out.println(p.title);
-		}
+		String path = "C:\\Users\\WagJK\\Desktop\\FYP\\SpaceKey-backend\\dataset\\";
+		String filenamePOI = "poi.csv";
+		String filenameProp = "property_cropped.csv";
+		
+		// ArrayList<String[]> result = readPOI("C:\\Users\\WagJK\\Desktop\\FYP\\SpaceKey-backend\\dataset\\poi.csv");
+		ArrayList<Property> result = readProperty(path, filenameProp);
+		
+		System.out.println("Total data size: " + result.size());
+		
 	}
 }

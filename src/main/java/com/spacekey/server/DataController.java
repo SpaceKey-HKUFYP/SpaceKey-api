@@ -12,13 +12,16 @@ import org.springframework.web.bind.annotation.RestController;
 import com.spacekey.algorithm.Methods;
 import com.spacekey.algorithm.global.Point;
 import com.spacekey.algorithm.Link;
+import com.spacekey.util.DataReader;
+import com.spacekey.util.Const;
 
 @RestController
 @RequestMapping("data")
 public class DataController {
 
-	@GetMapping("")
-	String mck() {
-		return "Yes";
+	@GetMapping("property")
+	ArrayList<Property> getProperties() {
+		return DataReader.readProperty(path, filename)
 	}
+	
 }
