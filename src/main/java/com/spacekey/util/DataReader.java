@@ -7,34 +7,40 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import com.opencsv.CSVReader;
+import com.spacekey.util.POI;
 
 public class DataReader {
 	
-	public static ArrayList<String[]> readPOI(String csvFile) {
-		BufferedReader br = null;
-		String line = "";
-		String splitChar = ";";
-		ArrayList<String[]> result = new ArrayList<String[]>();
-		
-		try {
-	        br = new BufferedReader(new FileReader(csvFile));
-	        while ((line = br.readLine()) != null) {
-		        String[] items = line.split(splitChar);
-		        result.add(items);
-		    }
-	
+	public static ArrayList<POI> readPOI(String path, String filename) {
+		ArrayList<POI> result = new ArrayList<POI>();
+        try {
+			CSVReader reader = new CSVReader(new FileReader(path + filename), ';');
+			String [] items;
+			int count = 0;
+			while ((items = reader.readNext()) != null) {
+				if (count == 0) { count++; continue; } else count++;
+			    // items[] is an array of values from the line
+				for (int i=0 ; i<items.length ; i++) {
+					System.out.print(items[i] + " ");
+				}
+				POI p = new POI();
+				p.name = items[0];
+				p.numOfReviews = Integer.parseInt(items[1]);
+				p.searchKey = items[2];
+				p.givenKey = items[3];
+				p.address = items[4];
+				p.lat = Double.parseDouble(items[5]);
+				p.lng = Double.parseDouble(items[6]);
+				p.id = Integer.parseInt(items[7]);
+				
+				result.add(p);
+				System.out.println();
+			}
+			reader.close();
 		} catch (FileNotFoundException e) {
 		    e.printStackTrace();
 		} catch (IOException e) {
 		    e.printStackTrace();
-		} finally {
-		    if (br != null) {
-		        try {
-		            br.close();
-		        } catch (IOException e) {
-		            e.printStackTrace();
-		        }
-		    }
 		}
         return result;
 	}
@@ -88,11 +94,11 @@ public class DataReader {
 
 	public static void main(String[] args) {
 		String path = "C:\\Users\\WagJK\\Desktop\\FYP\\SpaceKey-backend\\dataset\\";
-		String filenamePOI = "poi.csv";
+		String filenamePOI = "place_sample.csv";
 		String filenameProp = "property_cropped.csv";
 		
-		// ArrayList<String[]> result = readPOI("C:\\Users\\WagJK\\Desktop\\FYP\\SpaceKey-backend\\dataset\\poi.csv");
-		ArrayList<Property> result = readProperty(path, filenameProp);
+		ArrayList<POI> result = readPOI(path, filenamePOI);
+		// ArrayList<Property> result = readProperty(path, filenameProp);
 		
 		System.out.println("Total data size: " + result.size());
 		

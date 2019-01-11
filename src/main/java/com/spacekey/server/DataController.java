@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.spacekey.util.DataReader;
 import com.spacekey.util.Const;
 import com.spacekey.util.Property;
+import com.spacekey.util.POI;
 
 @RestController
 @RequestMapping("data")
@@ -25,8 +26,15 @@ public class DataController {
 		}
 	}
 	
+	class POIRet {
+		public ArrayList<POI> POIData;
+		public POIRet(ArrayList<POI> POIData) {
+			this.POIData = POIData;
+		}
+	}
+	
 	@GetMapping("property/get")
-	PropertyRet test(@RequestParam String type, @RequestParam String region) {
+	PropertyRet getProp(@RequestParam String type, @RequestParam String region) {
 		ArrayList<Property> data = DataReader.readProperty(Const.path, Const.filenameProp);
 		ArrayList<Property> result = new ArrayList<Property>();
 		System.out.println(type + " " + region);
@@ -39,7 +47,16 @@ public class DataController {
 	}
 	
 	@GetMapping("property/all")
-	ArrayList<Property> getPropAll() {
-		return DataReader.readProperty(Const.path, Const.filenameProp);
+	PropertyRet getPropAll() {
+		return new PropertyRet(
+			DataReader.readProperty(Const.path, Const.filenameProp)
+		);
+	}
+	
+	@GetMapping("poi/get")
+	POIRet getPOIall() {
+		return new POIRet(
+			DataReader.readPOI(Const.path, Const.filenamePOI)
+		);
 	}
 }
