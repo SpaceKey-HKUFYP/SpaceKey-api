@@ -4,6 +4,7 @@ import java.util.HashSet;
 
 import com.spacekey.algorithm.global.Config;
 import com.spacekey.algorithm.global.Point;
+import com.spacekey.server.Methods;
 
 public class Main {
 	

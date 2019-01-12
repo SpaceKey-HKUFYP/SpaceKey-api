@@ -25,37 +25,50 @@ public class DataController {
 			this.houseData = houseData;
 		}
 	}
-	
+
 	class POIRet {
-		public ArrayList<POI> POIData;
+		public ArrayList<POI> POIResult;
 		public POIRet(ArrayList<POI> POIData) {
-			this.POIData = POIData;
+			this.POIResult = POIData;
 		}
 	}
-	
+
 	@GetMapping("property/get")
 	PropertyRet getProp(@RequestParam String type, @RequestParam String region) {
+		System.out.println("!req property/get type=" + type + " region=" + region);
 		ArrayList<Property> data = DataReader.readProperty(Const.path, Const.filenameProp);
 		ArrayList<Property> result = new ArrayList<Property>();
-		System.out.println(type + " " + region);
 		for (Property p: data) {
-			// System.out.println(type + " " + p.type + " " + region + " " + p.region);
-			if (type == "null" || p.type.equals(type))
-				if (region == "null" || p.region.equals(region)) 
+			if (type == "any" || p.type.equals(type))
+				if (region == "any" || p.region.equals(region))
 					result.add(p);
 		}
 		return new PropertyRet(result);
 	}
-	
+
 	@GetMapping("property/all")
 	PropertyRet getPropAll() {
+		System.out.println("!req property/all");
 		return new PropertyRet(
 			DataReader.readProperty(Const.path, Const.filenameProp)
 		);
 	}
-	
+
 	@GetMapping("poi/get")
+	POIRet getPOI(@RequestParam String keyword) {
+		System.out.println("!req poi/get keyword" + keyword);
+		ArrayList<POI> data = DataReader.readPOI(Const.path, Const.filenamePOI);
+		ArrayList<POI> result = new ArrayList<POI>();
+		for (POI p: data) {
+			if (keyword == "any" || p.searchKey.equals(keyword))
+				result.add(p);
+		}
+		return new POIRet(result);
+	}
+	
+	@GetMapping("poi/all")
 	POIRet getPOIall() {
+		System.out.println("!req poi/all");
 		return new POIRet(
 			DataReader.readPOI(Const.path, Const.filenamePOI)
 		);

@@ -1,9 +1,10 @@
-package com.spacekey.algorithm;
+package com.spacekey.server;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.TreeMap;
 
+import com.spacekey.algorithm.Link;
 import com.spacekey.algorithm.global.DataReader;
 import com.spacekey.algorithm.global.Env;
 import com.spacekey.algorithm.global.Pair;
@@ -13,6 +14,10 @@ import com.spacekey.algorithm.global.datastruct.docindex.InvertedFile;
 import com.spacekey.algorithm.global.typedef.Dataset;
 import com.spacekey.algorithm.global.typedef.Group;
 import com.spacekey.algorithm.global.typedef.STObject;
+
+import com.spacekey.util.Const;
+import com.spacekey.util.POI;
+import com.spacekey.util.Property;
 
 import java.util.ArrayList;
 import java.util.Set;
@@ -24,6 +29,55 @@ public class Methods implements MethodsInterface {
 	private com.spacekey.algorithm.coskq.index.Node coskqRoot;
 	private com.spacekey.algorithm.spm.irtree.Node spmRoot;
 	private InvertedFile invertedFile;
+	
+	public void constructDataWeb() {
+		ArrayList<POI> dataPOI 			= com.spacekey.util.DataReader.readPOI(Const.path, Const.filenamePOI);
+		ArrayList<Property> dataProp 	= com.spacekey.util.DataReader.readProperty(Const.path, Const.filenameProp);
+		
+		int size = dataPOI.size() + dataProp.size();
+		loc = new double[size][];
+		kws = new String[size][];
+		
+		int index = 0;
+		for (POI p : dataPOI) {
+			loc[index] = new double[2];
+			loc[index][0] = p.lat;
+			loc[index][1] = p.lng;
+			kws[index] = new String[1];
+			kws[index][0] = p.searchKey;
+			index++;
+		}
+		for (Property p: dataProp) {
+			loc[index] = new double[2];
+			loc[index][0] = p.lat;
+			loc[index][1] = p.lng;
+			kws[index] = new String[1];
+			kws[index][0] = "property";
+			index++;
+		}
+		Env.W = new Words();
+		InvertedFile iv = new InvertedFile();
+		Dataset db = new Dataset();
+		for (int i=0 ; i<loc.length ; i++) {
+			HashSet<String> keywords = new HashSet<String>();
+			for (int j=0 ; j<kws[i].length ; j++)
+				keywords.add(kws[i][j]);
+			STObject obj = new STObject(i+1, loc[i][0], loc[i][1], keywords);
+			db.add(obj);
+			Env.W.add(obj);
+		}
+		for (STObject o: db) iv.add(o);	// loading objects into the inverted file
+		this.invertedFile = iv;
+		
+		String indexFile = com.spacekey.algorithm.global.Config.indexUK;
+		com.spacekey.algorithm.coskq.index.BuildIRTree builder1 = new com.spacekey.algorithm.coskq.index.BuildIRTree(loc, kws, indexFile);
+		coskqRoot = builder1.build();
+		
+		indexFile = com.spacekey.algorithm.global.Config.indexUK;
+		com.spacekey.algorithm.spm.irtree.BuildIRTree builder2 = new com.spacekey.algorithm.spm.irtree.BuildIRTree(loc, kws, indexFile);
+		spmRoot = builder2.build();
+	}
+	
 	
 	public void constructData(String locPath, String docPath) {
 		// read data
@@ -270,14 +324,14 @@ public class Methods implements MethodsInterface {
 				int record[] = rsList.get(i);
 				HashSet<Point> oneResult = new HashSet<Point>();
 				for (int j = 0 ; j < record.length ; j++) {
-					Point point = new Point(loc[record[j]][0], loc[record[j]][1]);
+					Point point = new Point(record[j], loc[record[j]][0], loc[record[j]][1]);
 					point.addKeywordAll(all.keywordMap[j]);
 					oneResult.add(point);
 				}
 				result.add(oneResult);
 			}
 			return result;
-		} else return null;
+		} else return new HashSet<HashSet<Point>>();
 	}
 	
 	public ArrayList<HashSet<Point>> spmTopK(List<Link> linkList, int k, double query_x, double query_y) {

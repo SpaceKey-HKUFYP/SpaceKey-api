@@ -8,9 +8,39 @@ import java.util.HashSet;
  */
 public class Point {
 	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + id;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Point other = (Point) obj;
+		if (id != other.id)
+			return false;
+		return true;
+	}
+
+	public int id;
 	public double x = -1;
 	public double y = -1;
 	public HashSet<String> keywords;
+	
+	public Point(int id, double x, double y) {
+		this.id = id;
+		this.x = x;
+		this.y = y;
+		this.keywords = new HashSet<String>();
+	}
 	
 	public Point(double x, double y){
 		this.x = x;

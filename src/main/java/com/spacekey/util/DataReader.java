@@ -16,13 +16,9 @@ public class DataReader {
         try {
 			CSVReader reader = new CSVReader(new FileReader(path + filename), ';');
 			String [] items;
-			int count = 0;
+			int count = 0, index = 0;
 			while ((items = reader.readNext()) != null) {
 				if (count == 0) { count++; continue; } else count++;
-			    // items[] is an array of values from the line
-//				for (int i=0 ; i<items.length ; i++) {
-//					System.out.print(items[i] + " ");
-//				}
 				POI p = new POI();
 				p.name = items[0];
 				p.numOfReviews = Integer.parseInt(items[1]);
@@ -31,7 +27,8 @@ public class DataReader {
 				p.address = items[4];
 				p.lat = Double.parseDouble(items[5]);
 				p.lng = Double.parseDouble(items[6]);
-				p.id = Integer.parseInt(items[7]);
+				// p.id = Integer.parseInt(items[7]);
+				p.id = index++;
 				
 				result.add(p);
 				System.out.println();
@@ -50,15 +47,12 @@ public class DataReader {
         try {
 			CSVReader reader = new CSVReader(new FileReader(path + filename));
 			String [] items;
-			int count = 0;
+			int count = 0, index = 0;
 			while ((items = reader.readNext()) != null) {
 				if (count == 0) { count++; continue; } else count++;
-			    // items[] is an array of values from the line
-//				for (int i=0 ; i<items.length ; i++) {
-//					System.out.print(items[i] + " ");
-//				}
 				Property p = new Property();
-				p.id = Integer.parseInt(items[0]);
+				// p.id = Integer.parseInt(items[0]);
+				p.id = index++;
 				p.type = items[1];
 				p.price = Integer.parseInt(items[2]);
 				p.rent = Integer.parseInt(items[3]);

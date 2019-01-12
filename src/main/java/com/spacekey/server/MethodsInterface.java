@@ -1,9 +1,10 @@
-package com.spacekey.algorithm;
+package com.spacekey.server;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.ArrayList;
 
+import com.spacekey.algorithm.Link;
 import com.spacekey.algorithm.global.Point;
 
 public interface MethodsInterface {
