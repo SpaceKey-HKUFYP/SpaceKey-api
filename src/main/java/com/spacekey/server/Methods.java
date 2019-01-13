@@ -55,6 +55,10 @@ public class Methods implements MethodsInterface {
 			kws[index][0] = "property";
 			index++;
 		}
+//		for (int i=0 ; i<size ; i++) {
+//			System.out.println(kws[i][0] + " " + loc[i][0] + " " + loc[i][1]);
+//		}
+		
 		Env.W = new Words();
 		InvertedFile iv = new InvertedFile();
 		Dataset db = new Dataset();
@@ -72,8 +76,7 @@ public class Methods implements MethodsInterface {
 		String indexFile = com.spacekey.algorithm.global.Config.indexUK;
 		com.spacekey.algorithm.coskq.index.BuildIRTree builder1 = new com.spacekey.algorithm.coskq.index.BuildIRTree(loc, kws, indexFile);
 		coskqRoot = builder1.build();
-		
-		indexFile = com.spacekey.algorithm.global.Config.indexUK;
+
 		com.spacekey.algorithm.spm.irtree.BuildIRTree builder2 = new com.spacekey.algorithm.spm.irtree.BuildIRTree(loc, kws, indexFile);
 		spmRoot = builder2.build();
 	}

@@ -31,7 +31,6 @@ public class DataReader {
 				p.id = index++;
 				
 				result.add(p);
-				System.out.println();
 			}
 			reader.close();
 		} catch (FileNotFoundException e) {
@@ -74,7 +73,6 @@ public class DataReader {
 				p.pageURL = items[19];
 				p.agentName = items[20];
 				result.add(p);
-				System.out.println();
 			}
 			reader.close();
 		} catch (FileNotFoundException e) {
