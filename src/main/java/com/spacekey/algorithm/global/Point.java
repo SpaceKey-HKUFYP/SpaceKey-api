@@ -53,10 +53,12 @@ public class Point {
 	}
 	
 	public static boolean dir(Point a, Point b, String dir) {
-		if (dir == "north" && a.x > b.x && Math.abs(a.x-b.x) > Math.abs(a.y-b.y)) return true;
-		if (dir == "south" && a.x < b.x && Math.abs(a.x-b.x) > Math.abs(a.y-b.y)) return true;
-		if (dir == "east" && a.y > b.y && Math.abs(a.x-b.x) < Math.abs(a.y-b.y)) return true;
-		if (dir == "west" && a.y < b.y && Math.abs(a.x-b.x) < Math.abs(a.y-b.y)) return true;
+		// System.out.println(a.keywords.toString() + " " + b.keywords.toString() + " " + dir);
+		if (dir.equals("any")) return true;
+		if (dir.equals("north") && a.x > b.x && Math.abs(a.x-b.x) > Math.abs(a.y-b.y)) return true;
+		if (dir.equals("south") && a.x < b.x && Math.abs(a.x-b.x) > Math.abs(a.y-b.y)) return true;
+		if (dir.equals("east")  && a.y > b.y && Math.abs(a.x-b.x) < Math.abs(a.y-b.y)) return true;
+		if (dir.equals("west")  && a.y < b.y && Math.abs(a.x-b.x) < Math.abs(a.y-b.y)) return true;
 		return false;
 	}
 	

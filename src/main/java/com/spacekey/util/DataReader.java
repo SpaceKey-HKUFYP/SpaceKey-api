@@ -85,7 +85,7 @@ public class DataReader {
 	
 
 	public static void main(String[] args) {
-		String path = "C:\\Users\\WagJK\\Desktop\\FYP\\SpaceKey-backend\\dataset\\";
+		String path = "C:\\Users\\wangj\\Desktop\\SpaceKey-api\\dataset\\";
 		String filenamePOI = "place_sample.csv";
 		String filenameProp = "property_cropped.csv";
 		

@@ -25,8 +25,7 @@ public class AlgController {
 
 	static class WantedObject {
 		public String keyword;
-		public int lower;
-		public int upper;
+		public int dist[];
 		public String dir;
 	}
 
@@ -66,11 +65,11 @@ public class AlgController {
 			double lower = 0, upper = 10;
 			k1.add("property");
 			k2.add(obj.keyword);
-			System.out.println(obj.keyword);
+			System.out.println("\t!" +obj.keyword + " " + obj.dir + " " + obj.dist[0] + " " + obj.dist[1]);
 			
 			double coordinateToMeter = 111320;
-			lower = obj.lower / coordinateToMeter;
-			upper = obj.upper / coordinateToMeter;
+			lower = obj.dist[0] / coordinateToMeter;
+			upper = obj.dist[1] / coordinateToMeter;
 			Link link = new Link(k1, k2, lower, upper, false, true, obj.dir);
 			linkList.add(link);
 		}
@@ -100,8 +99,7 @@ public class AlgController {
 						boolean flag_dir = false;
 						for (Point poi : result) {
 							if (poi.keywords.contains(obj.keyword))
-								if (Point.dir(poi, prop, obj.dir))
-									flag_dir = true;
+								if (Point.dir(poi, prop, obj.dir)) flag_dir = true;
 						}
 						if (!flag_dir) flag_break = true;
 					}
