@@ -52,6 +52,14 @@ public class Point {
 		return Math.sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y));
 	}
 	
+	public static boolean dir(Point a, Point b, String dir) {
+		if (dir == "north" && a.x > b.x && Math.abs(a.x-b.x) > Math.abs(a.y-b.y)) return true;
+		if (dir == "south" && a.x < b.x && Math.abs(a.x-b.x) > Math.abs(a.y-b.y)) return true;
+		if (dir == "east" && a.y > b.y && Math.abs(a.x-b.x) < Math.abs(a.y-b.y)) return true;
+		if (dir == "west" && a.y < b.y && Math.abs(a.x-b.x) < Math.abs(a.y-b.y)) return true;
+		return false;
+	}
+	
 	public static double averagePairwiseDist(HashSet<Point> points) {
 		double temp = 0;
 		for (Point x : points) {

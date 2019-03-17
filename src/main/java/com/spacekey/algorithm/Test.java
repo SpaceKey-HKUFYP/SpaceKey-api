@@ -6,15 +6,15 @@ import com.spacekey.algorithm.global.Config;
 import com.spacekey.algorithm.global.Point;
 import com.spacekey.server.Methods;
 
-public class Main {
+public class Test {
 	
 	public static String root = "C:\\Users\\WagJK\\Desktop\\FYP\\SpaceKey\\dataset\\UK\\";
 	
 	public static void main(String args[]) {
 		Methods methods = new Methods();
 		
-		String loc = Main.root + "loc";
-		String doc = Main.root + "doc";
+		String loc = Test.root + "loc";
+		String doc = Test.root + "doc";
 		
 		methods.constructData(loc, doc);
 		

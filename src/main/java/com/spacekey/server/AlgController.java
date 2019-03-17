@@ -77,7 +77,7 @@ public class AlgController {
 				lower = 1 / coordinateToKm;
 				upper = 1.5 / coordinateToKm;
 			}
-			Link link = new Link(k1, k2, lower, upper, false, true);
+			Link link = new Link(k1, k2, lower, upper, false, true, obj.dir);
 			linkList.add(link);
 		}
 
@@ -89,14 +89,31 @@ public class AlgController {
 
 		for (HashSet<Point> result : results) {
 			boolean flag = false;
+			
 			for (Point point : result) {
 				if (point.keywords.contains("property")) {
+					
 					Property p = dataProp.get(point.id - dataPOI.size());
-					if (type.equals("any") || p.type.equals(type)) {
-						if (region.equals("any") || p.region.equals(region)) {
-							props.add(p);
-							flag = true;
+					
+					boolean flag_break = false;
+					if (!(type.equals("any") || p.type.equals(type))) 
+						flag_break = true;
+					if (!(region.equals("any") || p.region.equals(region))) 
+						flag_break = true;
+					
+					Point prop = point;
+					for (WantedObject obj: wantedObjects) {
+						boolean flag_dir = false;
+						for (Point poi : result) {
+							if (poi.keywords.contains(obj.keyword))
+								if (Point.dir(poi, prop, obj.dir))
+									flag_dir = true;
 						}
+						if (!flag_dir) flag_break = true;
+					}
+					if (!flag_break) {
+						props.add(p);
+						flag = true;
 					}
 				}
 			}
@@ -111,49 +128,4 @@ public class AlgController {
 		System.out.println("POI size: " + POIs.size());
 		return new SpmSimpleRet(props, POIs);
 	}
-
-//	@GetMapping("mck/{keywords}")
-//	HashSet<Point> mck(@PathVariable String keywords) {
-//		Methods M = new Methods();
-//		M.constructData(
-//			"C:\\Users\\WagJK\\Desktop\\FYP\\SpaceKey\\dataset\\UK\\loc",
-//			"C:\\Users\\WagJK\\Desktop\\FYP\\SpaceKey\\dataset\\UK\\doc"
-//		);
-//		HashSet<String> keyword_list = new HashSet<String>();
-//		for (String keyword : keywords.split("-")) {
-//			keyword_list.add(keyword);
-//		}
-//		HashSet<Point> results = M.mckExact(keyword_list);
-//		return results;
-//	}
-//	
-//	@GetMapping("minsk/{keywords}")
-//	HashSet<Point> minsk(@PathVariable String keywords) {
-//		Methods M = new Methods();
-//		M.constructData(
-//			"C:\\Users\\WagJK\\Desktop\\FYP\\SpaceKey\\dataset\\UK\\loc",
-//			"C:\\Users\\WagJK\\Desktop\\FYP\\SpaceKey\\dataset\\UK\\doc"
-//		);
-//		HashSet<String> keyword_list = new HashSet<String>();
-//		for (String keyword : keywords.split("-")) {
-//			keyword_list.add(keyword);
-//		}
-//		HashSet<Point> results = M.minskScaleLune(keyword_list);
-//		return results;
-//	}
-//	
-//	@GetMapping("coskq/{lat}/{lng}/{keywords}")
-//	HashSet<Point> coskq(@PathVariable double lat, @PathVariable double lng, @PathVariable String keywords) {
-//		Methods M = new Methods();
-//		M.constructData(
-//			"C:\\Users\\WagJK\\Desktop\\FYP\\SpaceKey\\dataset\\UK\\loc",
-//			"C:\\Users\\WagJK\\Desktop\\FYP\\SpaceKey\\dataset\\UK\\doc"
-//		);
-//		HashSet<String> keyword_list = new HashSet<String>();
-//		for (String keyword : keywords.split("-")) {
-//			keyword_list.add(keyword);
-//		}
-//		HashSet<Point> results = M.coskqType1Exact(lat, lng, keyword_list);
-//		return results;
-//	}
 }

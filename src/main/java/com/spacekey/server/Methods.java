@@ -55,6 +55,7 @@ public class Methods implements MethodsInterface {
 			kws[index][0] = "property";
 			index++;
 		}
+		
 //		for (int i=0 ; i<size ; i++) {
 //			System.out.println(kws[i][0] + " " + loc[i][0] + " " + loc[i][1]);
 //		}

@@ -13,14 +13,24 @@ public class Link {
 	public double upper = -1;
 	public boolean left = false;
 	public boolean right = true;
+	public String dir = "";
 	
-	public Link(HashSet<String> keyword1, HashSet<String> keyword2, double lower, double upper, boolean left, boolean right){
+	public Link(
+			HashSet<String> keyword1, 
+			HashSet<String> keyword2, 
+			double lower, 
+			double upper, 
+			boolean left, 
+			boolean right, 
+			String dir
+	){
 		this.keyword1 = keyword1;
 		this.keyword2 = keyword2;
 		this.lower = lower;
 		this.upper = upper;
 		this.left = left;
 		this.right = right;
+		this.dir = dir;
 	}
 	
 	public String toString(){

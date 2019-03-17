@@ -42,10 +42,10 @@ public class MSJQuery {
 		HashSet<String> airport = new HashSet<String>(); airport.add("airport");
 		
 		
-		linkList.add(new Link(hotel, park, 0.0, 0.2, true, false));
-		linkList.add(new Link(hotel, metro, 0.005, 0.01, true, false));
-		linkList.add(new Link(hotel, bar, 0.0, 0.01, false, false));
-		linkList.add(new Link(metro, bar, 0.0, 0.02, false, false));
+		linkList.add(new Link(hotel, park, 0.0, 0.2, true, false, "any"));
+		linkList.add(new Link(hotel, metro, 0.005, 0.01, true, false, "any"));
+		linkList.add(new Link(hotel, bar, 0.0, 0.01, false, false, "any"));
+		linkList.add(new Link(metro, bar, 0.0, 0.02, false, false, "any"));
 
 		Pattern pattern = new Pattern(linkList);
 		MStarJoin all = new MStarJoin(root);
