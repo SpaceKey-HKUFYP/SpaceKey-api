@@ -25,7 +25,8 @@ public class AlgController {
 
 	static class WantedObject {
 		public String keyword;
-		public String dist;
+		public int lower;
+		public int upper;
 		public String dir;
 	}
 
@@ -66,17 +67,10 @@ public class AlgController {
 			k1.add("property");
 			k2.add(obj.keyword);
 			System.out.println(obj.keyword);
-			double coordinateToKm = 111;
-			if (obj.dist.equals("near")) {
-				lower = 0;
-				upper = 0.5 / coordinateToKm;
-			} else if (obj.dist.equals("medium")) {
-				lower = 0.5 / coordinateToKm;
-				upper = 1 / coordinateToKm;
-			} else if (obj.dist.equals("far")) {
-				lower = 1 / coordinateToKm;
-				upper = 1.5 / coordinateToKm;
-			}
+			
+			double coordinateToMeter = 111320;
+			lower = obj.lower / coordinateToMeter;
+			upper = obj.upper / coordinateToMeter;
 			Link link = new Link(k1, k2, lower, upper, false, true, obj.dir);
 			linkList.add(link);
 		}
