@@ -70,12 +70,12 @@ public class AlgController {
 
 			double coordinateToMeter = 111320;
 
-			lower = obj.dist[0] / coordinateToMeter;
-			if (obj.dist[1] == -1)
+			lower = obj.lower/ coordinateToMeter;
+			if (obj.upper == -1)
 				upper = 5000 / coordinateToMeter;
-			else upper = obj.dist[1] / coordinateToMeter;
+			else upper = obj.upper / coordinateToMeter;
 
-			if (obj.dist[0] == -1 && obj.dist[1] == -1) {
+			if (obj.upper == -1 && obj.upper == -1) {
 				// TODO: unwanted object
 			}
 
