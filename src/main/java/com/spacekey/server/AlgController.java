@@ -25,7 +25,8 @@ public class AlgController {
 
 	static class WantedObject {
 		public String keyword;
-		public int dist[];
+		public int lower;
+		public int upper;
 		public String dir;
 	}
 
@@ -50,26 +51,34 @@ public class AlgController {
 		ArrayList<WantedObject> wantedObjects = reqBody.wantedObjects;
 
 		Methods M = new Methods();
-		
+
 		System.out.println("!alg spm_simple type=" + type + " region=" + region);
 		M.constructDataWeb();
-		
+
 		ArrayList<POI> dataPOI = DataReader.readPOI(Const.path, Const.filenamePOI);
 		ArrayList<Property> dataProp = DataReader.readProperty(Const.path, Const.filenameProp);
 
 		List<Link> linkList = new ArrayList<Link>();
-		
+
 		for (WantedObject obj : wantedObjects) {
 			HashSet<String> k1 = new HashSet<String>();
 			HashSet<String> k2 = new HashSet<String>();
 			double lower = 0, upper = 10;
 			k1.add("property");
 			k2.add(obj.keyword);
-			System.out.println("\t!" +obj.keyword + " " + obj.dir + " " + obj.dist[0] + " " + obj.dist[1]);
-			
+			System.out.println("\t!" +obj.keyword + " " + obj.dir + " " + obj.lower + " " + obj.upper);
+
 			double coordinateToMeter = 111320;
+
 			lower = obj.dist[0] / coordinateToMeter;
-			upper = obj.dist[1] / coordinateToMeter;
+			if (obj.dist[1] == -1)
+				upper = 5000 / coordinateToMeter;
+			else upper = obj.dist[1] / coordinateToMeter;
+
+			if (obj.dist[0] == -1 && obj.dist[1] == -1) {
+				// TODO: unwanted object
+			}
+
 			Link link = new Link(k1, k2, lower, upper, false, true, obj.dir);
 			linkList.add(link);
 		}
@@ -77,23 +86,23 @@ public class AlgController {
 		HashSet<HashSet<Point>> results = M.spmMSJ(linkList);
 		HashSet<POI> POIs = new HashSet<POI>();
 		HashSet<Property> props = new HashSet<Property>();
-		
+
 		System.out.println("result size: " + results.size());
 
 		for (HashSet<Point> result : results) {
 			boolean flag = false;
-			
+
 			for (Point point : result) {
 				if (point.keywords.contains("property")) {
-					
+
 					Property p = dataProp.get(point.id - dataPOI.size());
-					
+
 					boolean flag_break = false;
-					if (!(type.equals("any") || p.type.equals(type))) 
+					if (!(type.equals("any") || p.type.equals(type)))
 						flag_break = true;
-					if (!(region.equals("any") || p.region.equals(region))) 
+					if (!(region.equals("any") || p.region.equals(region)))
 						flag_break = true;
-					
+
 					Point prop = point;
 					for (WantedObject obj: wantedObjects) {
 						boolean flag_dir = false;

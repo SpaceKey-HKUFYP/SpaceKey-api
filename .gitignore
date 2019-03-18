@@ -23,3 +23,8 @@
 /dist/
 /nbdist/
 /.nb-gradle/
+.metadata/.lock
+.metadata/.plugins/org.eclipse.m2e.logback.configuration/0.log
+.metadata/.plugins/org.eclipse.m2e.logback.configuration/logback.1.10.0.20181127-2120.xml
+.metadata/version.ini
+src/main/java/com/spacekey/util/Const.java
