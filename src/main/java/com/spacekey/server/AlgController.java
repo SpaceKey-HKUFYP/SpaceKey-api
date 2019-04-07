@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,6 +28,15 @@ public class AlgController {
 		public int upper;
 		public String dir;
 	}
+	
+	static class CustomObject {
+		public String keyword;
+		public int lower;
+		public int upper;
+		public String dir;
+		public double lat;
+		public double lng;
+	}
 
 	static class SpmSimpleRet {
 		public HashSet<Property> houseData;
@@ -42,25 +50,23 @@ public class AlgController {
 
 	static class SpmSimpleReq {
 		public ArrayList<WantedObject> wantedObjects;
+		public ArrayList<CustomObject> customObjects;
 	}
 
 	@PostMapping("spm_simple")
 	@ResponseBody
 	SpmSimpleRet spmSimple(@RequestParam String type, @RequestParam String region, @RequestBody SpmSimpleReq reqBody) {
-
-		ArrayList<WantedObject> wantedObjects = reqBody.wantedObjects;
-
-		Methods M = new Methods();
-
+		
 		System.out.println("!alg spm_simple type=" + type + " region=" + region);
-		M.constructDataWeb();
+		ArrayList<WantedObject> wantedObjects = reqBody.wantedObjects;
+		ArrayList<CustomObject> customObjects = reqBody.customObjects;
 
 		ArrayList<POI> dataPOI = DataReader.readPOI(Const.path, Const.filenamePOI);
 		ArrayList<Property> dataProp = DataReader.readProperty(Const.path, Const.filenameProp);
 
 		List<Link> linkList = new ArrayList<Link>();
-
 		for (WantedObject obj : wantedObjects) {
+			
 			HashSet<String> k1 = new HashSet<String>();
 			HashSet<String> k2 = new HashSet<String>();
 			double lower = 0, upper = 10;
@@ -69,7 +75,6 @@ public class AlgController {
 			System.out.println("\t!" +obj.keyword + " " + obj.dir + " " + obj.lower + " " + obj.upper);
 
 			double coordinateToMeter = 111320;
-
 			lower = obj.lower/ coordinateToMeter;
 			if (obj.upper == -1)
 				upper = 5000 / coordinateToMeter;
@@ -82,7 +87,41 @@ public class AlgController {
 			Link link = new Link(k1, k2, lower, upper, false, true, obj.dir);
 			linkList.add(link);
 		}
+		
+		String keyword[] = new String[customObjects.size()];
+		double lat[] = new double[customObjects.size()];
+		double lng[] = new double[customObjects.size()];
+		
+		int i = 0;
+		for (CustomObject obj: customObjects) {
+			
+			HashSet<String> k1 = new HashSet<String>();
+			HashSet<String> k2 = new HashSet<String>();
+			double lower = 0, upper = 10;
+			k1.add("property");
+			k2.add(obj.keyword);
+			System.out.println("\t!" +obj.keyword + " " + obj.dir + " " + obj.lower + " " + obj.upper);
 
+			double coordinateToMeter = 111320;
+			lower = obj.lower/ coordinateToMeter;
+			if (obj.upper == -1)
+				upper = 5000 / coordinateToMeter;
+			else upper = obj.upper / coordinateToMeter;
+
+			if (obj.upper == -1 && obj.upper == -1) {
+				// TODO: unwanted object
+			}
+
+			Link link = new Link(k1, k2, lower, upper, false, true, obj.dir);
+			linkList.add(link);
+			
+			keyword[i] = obj.keyword; lat[i] = obj.lat; lng[i] = obj.lng;
+			i++;
+		}
+
+		Methods M = new Methods();
+		M.constructDataWeb(keyword, lat, lng);
+		
 		HashSet<HashSet<Point>> results = M.spmMSJ(linkList);
 		HashSet<POI> POIs = new HashSet<POI>();
 		HashSet<Property> props = new HashSet<Property>();
@@ -120,7 +159,7 @@ public class AlgController {
 			}
 			if (flag) {
 				for (Point point : result)
-					if (!point.keywords.contains("property"))
+					if (!point.keywords.contains("property") && point.id < dataPOI.size())
 						POIs.add(dataPOI.get(point.id));
 			}
 

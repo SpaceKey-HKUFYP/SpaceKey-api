@@ -30,11 +30,11 @@ public class Methods implements MethodsInterface {
 	private com.spacekey.algorithm.spm.irtree.Node spmRoot;
 	private InvertedFile invertedFile;
 	
-	public void constructDataWeb() {
+	public void constructDataWeb(String[] keyword, double[] lat, double[] lng) {
 		ArrayList<POI> dataPOI 			= com.spacekey.util.DataReader.readPOI(Const.path, Const.filenamePOI);
 		ArrayList<Property> dataProp 	= com.spacekey.util.DataReader.readProperty(Const.path, Const.filenameProp);
 		
-		int size = dataPOI.size() + dataProp.size();
+		int size = dataPOI.size() + dataProp.size() + keyword.length;
 		loc = new double[size][];
 		kws = new String[size][];
 		
@@ -55,10 +55,16 @@ public class Methods implements MethodsInterface {
 			kws[index][0] = "property";
 			index++;
 		}
-		
-//		for (int i=0 ; i<size ; i++) {
-//			System.out.println(kws[i][0] + " " + loc[i][0] + " " + loc[i][1]);
-//		}
+		if (keyword.length > 0) {
+			for (int i=0 ; i<keyword.length ; i++) {
+				loc[index] = new double[2];
+				loc[index][0] = lat[i];
+				loc[index][1] = lng[i];
+				kws[index] = new String[1];
+				kws[index][0] = keyword[i];
+				index++;
+			}
+		}
 		
 		Env.W = new Words();
 		InvertedFile iv = new InvertedFile();
