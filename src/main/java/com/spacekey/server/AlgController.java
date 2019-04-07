@@ -77,7 +77,7 @@ public class AlgController {
 			double coordinateToMeter = 111320;
 			lower = obj.lower/ coordinateToMeter;
 			if (obj.upper == -1)
-				upper = 5000 / coordinateToMeter;
+				upper = 30000 / coordinateToMeter;
 			else upper = obj.upper / coordinateToMeter;
 
 			if (obj.upper == -1 && obj.upper == -1) {
@@ -105,7 +105,7 @@ public class AlgController {
 			double coordinateToMeter = 111320;
 			lower = obj.lower/ coordinateToMeter;
 			if (obj.upper == -1)
-				upper = 5000 / coordinateToMeter;
+				upper = 30000 / coordinateToMeter;
 			else upper = obj.upper / coordinateToMeter;
 
 			if (obj.upper == -1 && obj.upper == -1) {
