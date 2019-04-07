@@ -10,7 +10,11 @@ import com.opencsv.CSVReader;
 import com.spacekey.util.POI;
 
 public class DataReader {
-	
+	final static double lat_max = 24f;
+	final static double lat_min = 22f;
+	final static double lng_max = 115f;
+	final static double lng_min = 113f;
+
 	public static ArrayList<POI> readPOI(String path, String filename) {
 		ArrayList<POI> result = new ArrayList<POI>();
         try {
@@ -29,7 +33,7 @@ public class DataReader {
 				p.lng = Double.parseDouble(items[6]);
 				// p.id = Integer.parseInt(items[7]);
 				p.id = index++;
-				
+
 				result.add(p);
 			}
 			reader.close();
@@ -40,31 +44,36 @@ public class DataReader {
 		}
         return result;
 	}
-	
+
 	public static ArrayList<Property> readProperty(String path, String filename) {
+		//System.out.println("starting reading property data");
 		ArrayList<Property> result = new ArrayList<Property>();
         try {
-			CSVReader reader = new CSVReader(new FileReader(path + filename));
+			CSVReader reader = new CSVReader(new FileReader(path + filename),';');
 			String [] items;
 			int count = 0, index = 0;
 			while ((items = reader.readNext()) != null) {
 				if (count == 0) { count++; continue; } else count++;
 				Property p = new Property();
 				// p.id = Integer.parseInt(items[0]);
+				//System.out.print(items.length + " ");
+				//System.out.print(items[0]);
+				//System.out.print(items[18]);System.out.println();
+				//System.out.println("index " + index + "count " + count);
 				p.id = index++;
 				p.type = items[1];
-				p.price = Integer.parseInt(items[2]);
-				p.rent = Integer.parseInt(items[3]);
+				p.price = Integer.parseInt(items[2]); // 0 as null
+				p.rent = Integer.parseInt(items[3]);  // 0 as null
 				p.bedrooms = Integer.parseInt(items[4]);
-				p.grossArea = Integer.parseInt(items[5]);
-				p.saleableArea = Integer.parseInt(items[6]);
-				p.floor = items[7];
-				p.address = items[8];
+				p.grossArea = (int)Double.parseDouble(items[5]);  // 0 as null
+				p.saleableArea = (int)Double.parseDouble(items[6]);  // 0 as null
+				p.floor = items[7]; 		// can be ""
+				p.address = items[8];		// can be ""
 				p.postDate = items[9];
-				p.lat = Double.parseDouble(items[10]);
+				p.lat = Double.parseDouble(items[10]); // 0 as null
 				p.lng = Double.parseDouble(items[11]);
 				p.title = items[12];
-				p.region = items[13];
+				p.region = items[13];  // can be ""
 				p.propertyName = items[14];
 				p.description = items[15];
 				p.contact = items[16];
@@ -72,6 +81,12 @@ public class DataReader {
 				p.imageURL = items[18];
 				p.pageURL = items[19];
 				p.agentName = items[20];
+				if(p.lat == 0.0f
+						|| p.imageURL == "https://www.28hse.com/en/utf8/dreamimages/nophoto150.jpg"
+						|| (p.price == 0.0f && p.rent == 0.0f)
+						|| (p.lat > lat_max || p.lat < lat_min)
+						|| (p.lng > lng_max || p.lng < lng_min)
+						) continue;
 				result.add(p);
 			}
 			reader.close();
@@ -82,17 +97,20 @@ public class DataReader {
 		}
         return result;
 	}
-	
+
 
 	public static void main(String[] args) {
-		String path = "C:\\Users\\wangj\\Desktop\\SpaceKey-api\\dataset\\";
+		//System.out.println("current dir" + System.getProperty("user.dir"));
+		String appPath = System.getProperty("user.dir");
+		String path = appPath + "//dataset//";
 		String filenamePOI = "place_sample.csv";
-		String filenameProp = "property_cropped.csv";
-		
+		String filenameProp = "property_sample_test.csv";
+
 		ArrayList<POI> result = readPOI(path, filenamePOI);
-		// ArrayList<Property> result = readProperty(path, filenameProp);
-		
+		ArrayList<Property> propResult = readProperty(path, filenameProp);
+
+
 		System.out.println("Total data size: " + result.size());
-		
+
 	}
 }
